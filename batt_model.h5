@@ -1,0 +1,21 @@
+# placeholder_model.py
+import numpy as np
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense
+
+model = Sequential([
+    Conv2D(8, (3,3), activation='relu', input_shape=(64, 64, 1)),
+    MaxPooling2D(2,2),
+    Flatten(),
+    Dense(16, activation='relu'),
+    Dense(3, activation='softmax')  # Fake: Healthy, Bulging, Cracked
+])
+
+model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
+
+# Fake training data
+X_fake = np.random.rand(20, 64, 64, 1)
+y_fake = np.eye(3)[np.random.randint(0, 3, 20)]
+
+model.fit(X_fake, y_fake, epochs=1)
+model.save("battery_model.h5")
